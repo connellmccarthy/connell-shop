@@ -1,0 +1,77 @@
+<div class="wrapper">
+  {% paginate collection.products by 6 %}
+    <h1 class="visually-hidden">{{ collection.title }}</h1>
+    <div class="filters" data-aos="fadeIn">
+      <div class="collections">
+        <p>Showing all products {% if collection.title != 'Products' %}with {{ collection.title }}{% endif %}
+        </p>
+      </div>
+      {% render 'collection-sorting' %}
+    </div>
+    <div class="filters collections" data-aos="fadeIn">
+      <a class="btn primary {% if handle == 'all' %}dark{% else %}light border{% endif %}" href="/collections/all">All</a>
+      {% for collection in collections %}
+        <a class="btn primary {% if collection.handle == handle %}dark{% else %}light border{%endif%}" href="{{ collection.url }}">{{ collection.title }}</a>
+      {% endfor %}
+    </div>
+    <div class="product_grid">
+      {% for product in collection.products %}
+        <a class="local product" href="{{ product.url | within: collection }}" data-aos="fadeIn">
+          <img src="{{ product.featured_image.src | img_url: '1024x' }}" alt="{{ product.featured_image.alt | escape }}">
+          <div class="product_details">
+            <p class="title">{{ product.title }}</p>
+            <p class="muted price">Starting at {{ product.price | money_with_currency }}</p>
+            {% unless product.available %}<br><strong>Sold out</strong>{% endunless %}
+          </div>
+        </a>
+      {% else %}
+        <p>no matches</p>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}
+      <ul class="pagination" data-aos="fadeIn">
+        {% if paginate.previous %}
+          <li class="pagination_nav">
+            <a class="local" href="{{ paginate.previous.url }}" title="Previous page">
+              <i class="far fa-arrow-left" aria-hidden="true"></i>
+              <span class="visually-hidden">Previous page</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="pagination_nav">
+            <a class="local disabled" title="Previous page" aria-disabled="true" disabled>
+              <i class="far fa-arrow-left" aria-hidden="true"></i>
+              <span class="visually-hidden">Previous page</span>
+            </a>
+          </li>
+        {% endif %}
+        {% for part in paginate.parts %}
+          {% if part.is_link %}
+            <li>
+              <a class="local" href="{{ part.url }}"><span class="visually-hidden">page</span> {{ part.title }}</a>
+            </li>
+          {% else %}
+            <li class="no_link {% if part.title == paginate.current_page %}active{% endif %}">
+              <span class="visually-hidden">page</span> {{ part.title }}
+            </li>
+          {% endif %}
+        {% endfor %}
+        {% if paginate.next %}
+          <li class="pagination_nav">
+            <a class="local" href="{{ paginate.next.url }}" title="Next page">
+              <i class="far fa-arrow-right" aria-hidden="true"></i>
+              <span class="visually-hidden">Next page</span>
+            </a>
+          </li>
+        {% else %}
+          <li class="pagination_nav">
+            <a class="local disabled" title="Next page" aria-disabled="true" disabled>
+              <i class="far fa-arrow-right" aria-hidden="true"></i>
+              <span class="visually-hidden">Next page</span>
+            </a>
+          </li>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endpaginate %}
+</div>

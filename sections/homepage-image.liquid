@@ -1,0 +1,114 @@
+<div class="wrapper">
+  <div class="image_block {{ section.settings.image_position }}">
+    <div class="content" data-aos="fadeIn">
+      <h2>{{section.settings.headline}}</h2>
+      <p class="muted">{{section.settings.supporting }}</p>
+      {% if section.settings.cta_url %}
+      <a class="local" href="{{section.settings.cta_url}}">
+        {{section.settings.cta_text}}
+        {% if section.settings.cta_arrow %}
+          <i class="fal fa-arrow-right" aria-hidden="true"></i>
+        {% endif %}
+      </a>
+      {% endif %}
+    </div>
+    <div class="image" data-aos="fadeIn">
+      <img src="{{ section.settings.image | img_url: '600x' }}" alt="{{ section.settings.image_alt }}">
+      {% if section.settings.tagged_product %}
+        {% assign product_item = all_products[section.settings.product] %}
+        <a class="local btn primary circle light border pop pop-right" href="{{ product_item.url }}" data-pop="{{ product_item.title }}">
+          <i class="far fa-tag" aria-hidden="true"></i>
+          <span class="visually-hidden">Go to {{ product_item.title }}</span>
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Image & Text",
+  "presets": [
+    {
+      "category": "Homepage",
+      "name":"Image & Text"
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Headline"
+    },
+    {
+      "type": "textarea",
+      "id": "supporting",
+      "label": "Description",
+      "default": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA URL"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA Text",
+      "default": "Check this out"
+    },
+    {
+      "type": "checkbox",
+      "id": "cta_arrow",
+      "label": "CTA Arrow",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "textarea",
+      "id": "image_alt",
+      "label": "Image Description"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "tagged_product",
+      "label": "Show tagged product",
+      "default": false
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Tagged product",
+      "info": "Product that is in the image"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,45 @@
+{% assign content = page.content | replace: '<p>', '%split%' | remove: '</p>' %}
+{% assign page_content = content | split: '%split%' %}
+<div class="wrapper page">
+  <div class="page-leading">
+    <h1 class="center mobile-left" data-aos="fadeIn">{{ page.title }}</h1>
+    <p class="center max-35 mt-1 muted mobile-left" data-aos="fadeIn">{{ page_content[1] }}</p>
+  </div>
+  <div class="image_block right">
+    <div class="content" data-aos="fadeIn">
+      <h2>{{ page_content[2] }}</h2>
+      <p class="muted">{{ page_content[3] }}</p>
+      {{ page_content[4] | remove: '<p>' | remove: '</p>' }}
+    </div>
+    <div class="image" data-aos="fadeIn">
+      {{ page_content[5] | remove: '<p>' | remove: '</p>' }}
+    </div>
+  </div>
+  <div class="tree_highlight">
+    <div class="avatar" data-aos="fadeIn">
+      {{ page_content[6] | remove: '<p>' | remove: '</p>' }}
+    </div>
+    <h2 class="center" data-aos="fadeIn">{{ page_content[7] }}</h2>
+    <p id="trees_count" data-aos="fadeIn">0 trees</p>
+    <p class="muted center" data-aos="fadeIn">{{ page_content[8] }}</p>
+    <script>
+      $.get( "https://www.pledge.to/widgets/impact/em34jezzqn0exO3LPY92Ng", function( data ) {
+        if (data) {
+          var response = data.toString();
+          var key = '<h1 class="h3 widget-title">$';
+          const pos1 = response.indexOf(key) + key.length;
+          const pos2 = response.indexOf(`</h1>`);
+          var result = response.substring(pos1, pos2);
+          console.log(result + ' trees planted!');
+          $('#trees_count').text(`${result} trees`);
+        }
+      });
+    </script>
+  </div>  
+</div>
+<div class="wrapper">
+  <h2 class="center mobile-left" data-aos="fadeIn">{{ page_content[9] | remove: '<p></p>' }}</h2>
+  <p class="center max-30 muted mt-1 mobile-left" data-aos="fadeIn">{{ page_content[10] | remove: '<p></p>' }}</p>
+  <a class="local center mt-1 mobile-left" href="/collections/all" data-aos="fadeIn">Shop all products <i class="fal fa-arrow-right" aria-hidden="true"></i></a>
+</div>
+{% section 'homepage-featured' %}

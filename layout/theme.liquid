@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <title>Connell McCarthy &mdash; {{ page_title }}</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="utf-8">
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <meta name="facebook-domain-verification" content="hb2sikikggvm6d9fyz0pdsc4gtk77g" />
+
+  <meta name="description" content="{{ page_description | escape }}">
+  <meta name="keywords" content="connell, connell mccarthy, photography, design, video editing, productivity, interior design, creative, web design">
+  <meta name="copyright" content="Copyright 2021 by Connell McCarthy.">
+  <meta property="og:title" content="Connell McCarthy &mdash; {{ page_title }}">
+  <meta property="og:description" content="{{ page_description | escape }}">
+  {% if template != 'product' %}
+    <meta name="og:image" content="https://www.connellmccarthy.com/img/feature.jpg"/>
+  {% endif %}
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@ConnellMcCarthy">
+  <meta name="twitter:creator" content="@ConnellMcCarthy">
+  <meta name="twitter:title" content="{{ page_title }}">
+  <meta name="twitter:description" content="{{ page_description | escape }}">
+  {% if template == 'product' %}
+    <meta name="twitter:image" content="{{ product.featured_image | img_url: 'medium' }}">
+  {% else %}
+    <meta name="twitter:image" content="https://www.connellmccarthy.com/img/feature.jpg">
+  {% endif %}
+
+  <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.shopify.com/s/files/1/1624/2355/files/apple-touch-icon.png?v=1619793914">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://cdn.shopify.com/s/files/1/1624/2355/files/favicon-32x32.png?v=1619793915">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://cdn.shopify.com/s/files/1/1624/2355/files/favicon-16x16.png?v=1619793914">
+  <link rel="manifest" href="https://cdn.shopify.com/s/files/1/1624/2355/files/site.webmanifest?v=1619793914">
+  <link rel="shortcut icon" href="https://cdn.shopify.com/s/files/1/1624/2355/files/favicon.ico?v=1619793914">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="https://cdn.shopify.com/s/files/1/1624/2355/files/browserconfig.xml?v=1619793914">
+  <meta name="theme-color" content="#ff6136">
+
+  {{ content_for_header }} <!-- Header hook for plugins -->
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  {% if template == "index" %}
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  {% endif %}
+  {{ 'style.css' | asset_url | stylesheet_tag }}
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+  <script src="https://kit.fontawesome.com/be9fc87a0c.js" crossorigin="anonymous"></script>
+
+  {% if template == 'product' or product.template_suffix == 'dark' %}
+    {{ 'option_selection.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+
+</head>
+<body>
+
+  {% include 'navigation' %}
+
+  <main role="main">
+    {{ content_for_layout }}
+  </main>
+
+  {% include 'footer' %}
+
+  {{ 'main.js' | asset_url | script_tag }}
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+      AOS.init();
+  </script>
+</body>
+</html>

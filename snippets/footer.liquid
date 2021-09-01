@@ -1,0 +1,27 @@
+<div class="section footer">
+  <div class="wrapper" data-aos="fade-in">
+      <h2>Need help? Send me a note and I’ll get back to you as soon as possible.</h2>
+      <div class="col">
+          <div class="one">
+              <p>Connell McCarthy</p>
+              <p>Canada</p>
+              <p>me@connellmccarthy.com</p>
+          </div>
+          <div class="two">
+              <p>&copy; 2021</p>
+              <p>Handcrafted with care &#129305;</p>
+          </div>
+      </div>
+      <ul class="socials">
+        {% for link in linklists.footer-main.links %}
+          <li><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.title }}</a></li>
+        {% endfor %}
+      </ul>
+      <button title="Back to top" class="back-to-top">Back to top <i class="fal fa-arrow-up"></i></button>
+      
+      <!-- {% form 'currency' %}
+        {{ form | currency_selector }}
+        <button type="submit">Update</button>
+      {% endform %} -->
+  </div>
+</div>

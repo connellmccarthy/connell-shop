@@ -1,0 +1,192 @@
+<div class="product-header dark">
+  {% if product.images[2] %}
+    <img src="{{ product.images[2] | product_img_url: 'master' }}" data-aos="fadeIn">
+  {% endif %}
+  <div class="wrapper" data-aos="fadeIn">
+    <a class="local btn primary dark" href="/collections/all">
+      <i class="fal fa-arrow-left" aria-hidden="true"></i>
+      Shop all products
+    </a>
+    <div class="product-info">
+      <h1 class="title">{{ product.title }}</h1>
+      <p class="muted price">Starting from {{ product.price | | money_with_currency }}</p>
+      <button id="buying_options" class="btn primary light">
+        Buying options
+      </button>
+      <script>
+        $("#buying_options").click(function() {
+            $([document.documentElement, document.body]).animate({
+                scrollTop: $(".product_form").offset().top - 40
+            }, 1000);
+        });
+      </script>
+    </div>
+  </div>
+</div>
+<div class="product-features">
+  <ul data-aos="fadeIn">
+    <li>
+      {% include 'icon-sizing' %}
+      <p class="muted">Various sizing options</p>
+    </li>
+    <li>
+      {% include 'icon-photopaper' %}
+      {% if product.type == 'Photo print' %}
+        <p class="muted">Premium lustre photo paper</p>
+      {% elsif product.type == 'Fine art' %}
+        <p class="muted">Fine art paper</p>
+      {% else %}
+        <p class="muted">Premium lustre photo paper</p>
+      {% endif %}
+    </li>
+    <li>
+      {% include 'icon-inks' %}
+      <p class="muted">Water-based inks</p>
+    </li>
+    <li>
+      {% include 'icon-forest' %}
+      <p class="muted">Sustainably sourced paper</p>
+    </li>
+  </ul>
+</div>
+
+<div class="wrapper">
+  <div class="product-description" data-aos="fadeIn">{{ product.description }}</div>
+
+  <div class="product_page">
+    {% assign current_variant = product.selected_or_first_available_variant %}
+    <div class="product_image" data-aos="fadeIn">
+      {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+      <img id="product_image" src="{{ current_variant.image.src | img_url: 'large' }}" alt="{{ featured_image.alt | escape }}">
+    </div>
+    <div class="product_form" data-aos="fadeIn">
+      <p class="title">{{ product.title }}</p>
+      <p class="price" id="product_price">{{ current_variant.price | money_with_currency }}</p>
+      <hr />
+
+      <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
+        <div class="options">
+          <select name="id" id="product-{{ product.id }}-selector" style="display: none;">
+            {% for variant in product.variants %}
+              {% if variant.available %}
+              <option {% if forloop.length <= 1 and variant == product.selected_or_first_available_variant %} selected="selected" {% endif %} data-sku="{{ variant.sku }}" value="{{ variant.id }}">{{ variant.title }} - {{ variant.price | money_with_currency }}</option>
+              {% else %}
+                <option disabled="disabled">
+                  {{ variant.title }} - Sold out
+                </option>
+              {% endif %}
+            {% endfor %}
+          </select>
+          {% if product.available and product.variants.size > 1 %}
+            {% assign product_options = product.options | reverse %}
+            {% render 'swatch' for product_options as swatch %}
+          {% endif %}
+        </div>
+        <script>
+          var selectCallback = function(variant, selector) {
+            if (variant) {
+              $('#product_image').attr('src', variant.featured_image.src);
+              $('#product_price').text(`${Shopify.formatMoney(variant.price, '{{ shop.money_with_currency_format }}')}`);
+            }
+          };
+          jQuery(function($) {
+            new Shopify.OptionSelectors("product-{{ product.id }}-selector", { product: {{ product | json }}, onVariantSelected: selectCallback, enableHistoryState: true });
+          });
+        </script>
+        <script>
+          $('.swatch :radio').change(function() {
+            var optionIndex = jQuery(this).closest('.swatch').attr('data-option-index');
+            var optionValue = jQuery(this).val();
+            $(this)
+              .closest('form')
+              .find('.single-option-selector')
+              .eq(optionIndex)
+              .val(optionValue)
+              .trigger('change');
+          });
+        </script>
+
+        <div class="quantity">
+          <label class="muted" for="quantity">Quantity</label>  
+          <div class="quant_select">
+            <button id="quant_minus" class="btn secondary dark" type="button">
+              <i class="fal fa-minus" aria-hidden="true"></i>
+              <span class="visually-hidden">Subtract</span>
+            </button>
+            <input onfocus="this.select();" type="number" id="quantity" name="quantity" value="1" min="1">
+            <button id="quant_plus" class="btn secondary dark" type="button">
+              <i class="fal fa-plus" aria-hidden="true"></i>
+              <span class="visually-hidden">Add</span>
+            </button>
+            <script>
+              $('#quant_minus').click(function() {
+                let quantity = $('#quantity').val();
+                if (quantity != 1) {
+                  quantity--;
+                  $('#quantity').val(quantity);
+                }
+              });
+              $('#quant_plus').click(function() {
+                let quantity = $('#quantity').val();
+                quantity++;
+                $('#quantity').val(quantity);
+              });
+            </script>
+          </div>
+        </div>
+        
+        <hr />
+
+        <button class="btn primary dark" type="submit" name="add" id="AddToCart">Add to cart</button>
+        {% if product.type == 'Photo Print' %}
+          <p class="muted print-info">This gorgeous photograph is printed on a premium 240gsm paper with a satin lustre finish, and subtle pearl-like texture. It’s printed using water based inks, contains no plastic and is sustainably sourced from FSC-approved forests.</p>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+
+{% section 'product-value-1' %}
+
+{% section 'product-value-2' %}
+
+
+<div class="wrapper">
+  {% assign number_of_related_products = section.settings.number_of_related_products | plus:5 %}
+  {% if collection == null or collection.handle == 'frontpage' or collection.handle == 'all' %}
+    {% assign found_a_collection = false %}
+    {% for c in product.collections %}
+      {% if found_a_collection == false and c.handle != 'frontpage' and c.handle != 'all' and c.all_products_count > 1 %}
+        {% assign found_a_collection = true %}
+        {% assign collection = c %}
+      {% endif %}
+    {% endfor %}
+  {% endif %}
+  {% if collection and collection.products_count > 1 %}
+    <section class="related-products">
+      <h2 class="center mobile-left" data-aos="fadeIn">Let's make a gallery wall</h2>
+      <p class="muted center max-30 mt-1 mobile-left" data-aos="fadeIn">Here are some additional prints that you might be interested in.</p>
+
+      <div class="product_grid related">
+      {% assign current_product = product %}
+      {% assign current_product_found = false %}
+      {%  for product in collections.all.products limit: number_of_related_products %}
+        {% if product.handle == current_product.handle %}
+          {% assign current_product_found = true %}
+        {% else %}
+          {% unless current_product_found == false and forloop.last %}
+            <a class="local product" href="{{ product.url | within: collection }}" data-aos="fadeIn">
+              <img src="{{ product.featured_image.src | img_url: '1024x' }}" alt="{{ product.featured_image.alt | escape }}">
+              <div class="product_details">
+                <p class="title">{{ product.title }}</p>
+                <p class="muted price">Starting at {{ product.price | money_with_currency }}</p>
+                {% unless product.available %}<br><strong>Sold out</strong>{% endunless %}
+              </div>
+            </a>
+          {% endunless %}
+        {% endif %}
+      {% endfor %}
+      </div>
+    </section>
+  {% endif %}
+</div>

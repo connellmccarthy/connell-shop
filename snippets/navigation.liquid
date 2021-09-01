@@ -1,0 +1,52 @@
+<div class="loading"></div>
+
+<a class="local cart pop pop-left" href="/cart" data-pop="{{ cart.item_count }} items in your cart">
+  {% if cart.item_count >= 1 %}
+    <div class="notif">
+      <span class="visually-hidden">{{ cart.item_count }} items in your cart.</span>
+    </div>
+  {% endif %}
+  {% include 'icon-cart' %}
+  <div class="visually-hidden">{{ 'layout.cart.title' | t }}</div>
+</a>
+
+<header class="nav {% if product.template_suffix == 'dark' %}light{% endif %}" role="banner">
+  <div class="btn_nav_mobile" data-aos="fade-in"></div>
+  <div class="wrapper flex" data-aos="fade-in">
+    {% if template.name == 'index' %}
+      <h1 class="site_name">
+    {% else %}
+      <p class="site_name">
+    {% endif %}
+        <a href="/" class="site_name local">
+          {{ shop.name }}
+        </a>
+        &mdash; multi-faceted, Canadian creative.
+    {% if template.name == 'index' %}
+      </h1>
+    {% else %}
+      </p>
+    {% endif %}
+
+    <ul class="nav_menu">
+      {% for link in linklists.global.links %}
+        {% if link.title == 'Shop' %}
+          <li class="nav_link active">
+        {% else %}
+          <li class="nav_link">
+        {% endif %}
+        {% if link.url contains 'connellmccarthy.com' %}
+          <a class="local" href="{{ link.url }}">{{ link.title }}</a>
+        {% else %}
+          <a rel="noopener" href="{{ link.url }}">{{ link.title }}</a>
+        {% endif %}
+        </li>
+      {% endfor %}
+      <div class="mobile_image"></div>
+      <div class="mobile_info">
+          <p>&copy; 2021</p>
+          <p>me@connellmccarthy.com</p>
+      </div>
+    </ul>
+  </div>
+</header>

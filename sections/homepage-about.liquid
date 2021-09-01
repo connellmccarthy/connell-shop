@@ -1,0 +1,41 @@
+<div class="wrapper">
+  <h2 class="center mobile-left">{{ section.settings.headline }}</h2>
+  <p class="center max-30 muted mt-1 mobile-left">{{ section.settings.supporting }}</p>
+  <img class="full mt-5" src="{{ section.settings.image | img_url: '1600x' }}" alt="{{ section.settings.image_alt }}">
+</div>
+
+{% schema %}
+{
+  "name": "About the shop",
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Heading",
+      "default": "Headline"
+    },
+    {
+      "type": "textarea",
+      "id": "supporting",
+      "label": "Supporting text",
+      "default": "Lorem ipsum dolor is amor"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Photo"
+    },
+    {
+      "type": "textarea",
+      "id": "image_alt",
+      "label": "Image description"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Homepage",
+      "name":"About the shop"
+    }
+  ]
+}
+{% endschema %}

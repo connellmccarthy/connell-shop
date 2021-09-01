@@ -1,0 +1,64 @@
+<div class="wrapper value-prop" data-aos="fadeIn">
+  <div class="icon">
+    <i class="fal fa-{{ section.settings.icon }}" aria-hidden="true"></i>
+  </div>
+  <div class="content">
+    <h2>{{ section.settings.headline }}</h2>
+    {{ section.settings.supporting | newline_to_br }}
+    {% for block in section.blocks %}
+      <h4>{{ block.settings.heading }}</h4>
+      {{ block.settings.supporting }}
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Value Prop",
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Heading",
+      "default": "Headline"
+    },
+    {
+      "type": "richtext",
+      "id": "supporting",
+      "label": "Supporting text",
+      "default": "<p>Lorem ipsum dolor ist amet</p>"
+    },
+    {
+      "type": "text",
+      "id": "icon",
+      "label": "Icon",
+      "info": "Font Awesome icon name"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "list_item",
+      "name": "List item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading"
+        },
+        {
+          "type": "richtext",
+          "id": "supporting",
+          "label": "Supporting text",
+          "default": "<p>Lorem ipsum dolor ist amet</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "category": "Product",
+      "name":"Value Prop"
+    }
+  ]
+}
+{% endschema %}

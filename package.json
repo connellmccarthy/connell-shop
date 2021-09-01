@@ -1,0 +1,12 @@
+{
+  "name": "shop.connellmccarthy.com",
+  "version": "1.0.0",
+  "description": "Shopify Store for Connell McCarthy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "watch": "theme watch --allow-live & sass --watch assets/style.scss assets/style.css"
+  },
+  "author": "Connell McCarthy",
+  "license": "ISC"
+}

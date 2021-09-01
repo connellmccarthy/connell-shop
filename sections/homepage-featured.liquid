@@ -1,0 +1,142 @@
+{% if section.settings.headline %}
+  <div class="wrapper">
+    <h2 class="center mobile-left">{{ section.settings.headline }}</h2>
+    {% if section.settings.supporting %}
+      <p class="center max-30 muted mt-1 mobile-left">{{ section.settings.supporting }}</p>
+    {% endif %}
+  </div>
+{% endif %}
+<div class="featured_products_container">
+  {% if section.settings.scroll %}
+    <button id="product_next" class="btn primary dark circle navigation" data-aos="fadeIn">
+      <i class="far fa-arrow-right" aria-hidden="true"></i>
+      <span class="visually-hidden">Next</span>
+    </button>
+    <button id="product_prev" class="btn primary dark circle navigation" data-aos="fadeIn">
+      <i class="far fa-arrow-left" aria-hidden="true"></i>
+      <span class="visually-hidden">Previous</span>
+    </button>
+  {% endif %}
+  <div class="featured_products {% unless section.settings.scroll %}no-scroll{% endunless %}">
+    {% for block in section.blocks %}
+      {% assign product_item = all_products[block.settings.product] %}
+      <a href="{{product_item.url}}" class="product" data-aos="fadeIn">
+        <img src="{{ product_item | img_url: '815x' }}">
+        <div class="product_details">
+          <div class="product_info">
+            <p class="title {{ section.settings.text_color }}">{{product_item.title}}</p>
+            <p class="muted {{ section.settings.text_color }}">Starting at {{ product_item.price_min | money_with_currency}}</p>
+          </div>
+          {% if block.settings.show_badge %}
+            <span class="badge">
+              <i class="fal fa-{{block.settings.badge_icon}}"></i>
+              {{block.settings.badge_label}}
+            </span>
+          {% endif %}
+        </div>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+{% if section.settings.scroll %}
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script>
+    const next = $('#product_next');
+    const prev = $('#product_prev');
+    $('.featured_products').slick({
+      centerMode: true,
+      autoplay: true,
+      autoplaySpeed: 4000,
+      slidesToShow: 3,
+      prevArrow: prev,
+      nextArrow: next,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 1
+          }
+        }
+      ]
+    });
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Featured Product",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Heading"
+    },
+    {
+      "type": "textarea",
+      "id": "supporting",
+      "label": "Supporting text"
+    },
+    {
+      "type": "checkbox",
+      "id": "scroll",
+      "label": "Scroll through products",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Text colour",
+      "options": [
+        {
+          "value": "dark",
+          "label": "Dark"
+        },
+        {
+          "value": "light",
+          "label": "Light"
+        }
+      ],
+      "default": "dark"
+    }
+  ],
+  "presets": [
+    {
+      "category": "Homepage",
+      "name":"Featured Products"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Product",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_badge",
+          "label": "Show badge",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "badge_icon",
+          "label": "Icon",
+          "default": "star",
+          "info": "Font Awesome icon name"
+        },
+        {
+          "type": "text",
+          "id": "badge_label",
+          "label": "Label",
+          "default": "Best Seller"
+        },
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        } 
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,80 @@
+{% if cart.item_count > 0 %}
+  <div class="wrapper">
+    <h1 class="center cart" data-aos="fadeIn">{{ 'cart.general.title' | t }}</h1>
+    <div class="cart_buttons" data-aos="fadeIn">
+      <button form="cart_form" class="btn primary dark" type="submit" name="checkout">{{ 'cart.general.checkout' | t }}</button>
+      <span class="muted">or</span>
+      <a class="local" href="/collections/all">
+        Continue shopping
+        <i class="fal fa-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+    <form class="cart" id="cart_form" action="/cart" method="post" novalidate>
+          {% for item in cart.items %}
+            <div class="product" data-aos="fadeIn">
+              <div class="image">
+                <a href="{{ item.url | within: collections.all }}">
+                  <img src="{{ item | img_url: '250x' }}" alt="{{ item.title | escape }}">
+                </a>
+              </div>
+              <div class="controls">
+                <div class="top">
+                  <div class="details">
+                    <a href="{{ item.url | within: collections.all }}">
+                      <p class="title">{{ item.product.title }}</p>
+                    </a>
+                    <p class="variant muted">{{ item.variant.title }}</p>
+                  </div>
+                  <a class="btn secondary circle dark remove" href="/cart/change?line={{ forloop.index }}&amp;quantity=0">
+                    <i class="fal fa-times" aria-hidden="true"></i>
+                    <span class="visually-hidden">{{ 'cart.general.remove' | t }}</span>
+                  </a>
+                </div>
+                <div class="bottom">
+                  <div class="quantity">
+                    <label for="updates[]" class="visually-hidden">{{ 'cart.general.item_quantity' | t }}</label>
+                    <div class="quant_select">
+                      {% assign minus = item.quantity | minus: 1 %}
+                      <a class="btn secondary dark" href="/cart/change?line={{ forloop.index }}&amp;quantity={{ minus }}">
+                        <i class="fal fa-minus" aria-hidden="true"></i>
+                        <span class="visually-hidden">Subtract</span>
+                      </a>
+                      <input onfocus="this.select();" onchange="this.form.submit()" type="number" name="updates[]" id="updates_{{ item.key }}" value="{{ item.quantity }}" min="0">
+                      {% assign plus = item.quantity | plus: 1 %}
+                      <a class="btn secondary dark" href="/cart/change?line={{ forloop.index }}&amp;quantity={{ plus }}">
+                        <i class="fal fa-plus" aria-hidden="true"></i>
+                        <span class="visually-hidden">Add</span>
+                      </a>
+                    </div>
+                  </div>
+                  <div class="price">
+                    {% if item.original_line_price != item.line_price %}{{ item.original_line_price | money_with_currency }}{% endif %}
+                    {{ item.line_price | money_with_currency }}
+                    {% for discount in item.discounts %}{{ discount.title }}{% endfor %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        <div class="subtotal" data-aos="fadeIn">
+          <p class="title">{{ 'cart.general.subtotal' | t }}</p>
+          <p class="price">{{ cart.total_price | money_with_currency }}</p>
+        </div>
+        <div class="cart_buttons" data-aos="fadeIn">
+          <button class="btn primary dark" type="submit" name="checkout">{{ 'cart.general.checkout' | t }}</button>
+        </div>
+    </form>
+  </div>
+{% else %}
+  <div class="wrapper">
+    <h2 class="center cart" data-aos="fadeIn">{{ 'cart.general.title' | t }}</h2>
+    <p class="center" data-aos="fadeIn">{{ 'cart.general.empty' | t }}</p>
+    <div class="cart_buttons" style="margin-top: 40px;" data-aos="fadeIn">
+      <a class="local" href="/collections/all">
+        Continue shopping
+        <i class="fal fa-arrow-right" aria-hidden="true"></i>
+      </a>
+    </div>
+  </div>
+  {% section 'homepage-featured' %}
+{% endif %}
