@@ -1,56 +1,16 @@
-<div class="wrapper hero" data-aos="fade-in">
-  <h2 class="center">{{section.settings.heading}}</h2>
-  <p class="muted center">{{section.settings.supporting}}</p>
-  <div class="actions">
-    {% for block in section.blocks %}
-      <div class="modal" id="video_player">
-        <button class="btn close" id="video_close">
-          <i class="far fa-times" aria-hidden="true"></i>
-          <span class="visually-hidden">Close video</span>
-        </button>
-        <div class="wrapper">
-          <div style="padding:49.48% 0 0 0;position:relative;">
-            <iframe id="video_iframe" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;" title="{{block.settings.video_title}}"></iframe>
-          </div>
-        </div>
-        <script>
-          function parseUrl(val){
-              var vimeoRegex = /(?:vimeo)\.com.*(?:videos|video|channels|)\/([\d]+)/i;
-              var parsed = val.match(vimeoRegex);
-              return "//player.vimeo.com/video/" + parsed[1] + '?autoplay=0';
-          };
-          document.getElementById('video_iframe').src = parseUrl('{{ block.settings.video_url }}');
-        </script>
-        <script src="https://player.vimeo.com/api/player.js"></script>
+<div class="wrapper hero {% if section.settings.hero_image %}large flex{% endif %}" data-aos="fade-in">
+  {% if section.settings.hero_image %}
+    <div class="image_container {{ section.settings.image_position }}">
+      <img src="{{ section.settings.hero_image | img_url: '1600x' }}" alt="{{ section.settings.image_alt }}">
+    </div>
+    <div class="content_container" style="background-color: {{ section.settings.content_background }}">
+      <div class="content">
+        {% include 'hero-content' %}
       </div>
-      <button id="video_trigger" class="btn secondary dark"><i class="fal fa-play-circle" aria-hidden="true"></i> {{block.settings.video_text}}</button>
-      <script>
-        document.getElementById('video_trigger').addEventListener('click', function() {
-          const modal = document.getElementById('video_player');
-          modal.style.display = 'flex';
-          setTimeout(function() {
-            modal.classList.add('active');
-          }, 200);
-          document.addEventListener('keydown', function(event){
-            if(event.key === "Escape"){
-              if (document.getElementById('video_player').classList.contains('active')) {
-                closeModal();
-              }
-            }
-          });
-        });
-        document.getElementById('video_close').addEventListener('click', closeModal);
-        function closeModal() {
-          const modal = document.getElementById('video_player');
-          modal.classList.remove('active');
-          setTimeout(function() {
-            modal.style.display = 'none';
-          }, 620);
-        }
-      </script>
-    {% endfor %}
-    <a class="local center" href="{{section.settings.cta_url}}">{{section.settings.cta_text}} <i class="fal fa-arrow-right" aria-hidden="true"></i></a>
-  </div>
+    </div>
+  {% else %}
+    {% include 'hero-content' %}
+  {% endif %}
 </div>
 
 {% schema %}
@@ -85,6 +45,37 @@
       "type": "url",
       "id": "cta_url",
       "label": "CTA URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "hero_image",
+      "label": "Hero image"
+    },
+    {
+      "type": "textarea",
+      "id": "image_alt",
+      "label": "Image description"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image position",
+      "options": [
+      {
+        "value": "left",
+        "label": "Image on left"
+      },
+      {
+        "value": "right",
+        "label": "Image on right"
+      }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "content_background",
+      "label": "Content background",
+      "default": "#FFFFFF"
     }
   ],
   "blocks": [
